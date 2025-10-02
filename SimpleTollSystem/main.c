@@ -8,6 +8,7 @@ const char* ANSI_COLOR_GREEN = "\x1b[32m";
 const char* ANSI_COLOR_CYAN = "\x1b[36m";
 const char* ANSI_COLOR_RESET = "\x1b[0m";
 
+//Usei este método porque usar apenas const não é suficiente para poder usar a variável na hora de definir o tamanho de um array
 enum constants
 {
 	TOTAL_TOLL_RECORDS = 1000,
