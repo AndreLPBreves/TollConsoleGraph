@@ -160,30 +160,25 @@ static void clearScreen(void)
 }
 
 static bool waitForInput() {
-	printf("\n-----------------------------------------------------\n");
+	printf("\n-------------------------------------------------------------\n");
 	printf("Pressione QUALQUER TECLA para nova consulta ou ESC para SAIR.\n");
-	printf("-----------------------------------------------------\n");
+	printf("\n-------------------------------------------------------------\n");
 
-	// Limpa o buffer de entrada (CRUCIAL após o último scanf)
-	// Usamos um loop simples para garantir que o buffer esteja limpo antes do _getch
 	int c;
 	while ((c = getchar()) != '\n' && c != EOF) {}
 
-	// Captura a tecla IMEDIATAMENTE.
-	// Usamos _getch() se disponível (Windows) ou getchar() como fallback.
 	int key;
 #ifdef _WIN32
-	key = _getch(); // Captura imediata no Windows
+	key = _getch();
 #else
-	key = getchar(); // Requer ENTER, mas é mais portátil
+	key = getchar();
 #endif
 
-	// Valor de ESC em ASCII é 27.
 	if (key == 27) {
-		return false; // SAIR
+		return false;
 	}
 
-	return true; // CONTINUAR
+	return true;
 }
 
 int main(void)
