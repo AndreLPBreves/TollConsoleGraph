@@ -1,4 +1,5 @@
 ﻿#include "stdio.h"
+#include <stdbool.h>
 #include <stdlib.h>
 #include <time.h>
 #include <math.h> 
@@ -149,8 +150,48 @@ static void graphTollDataSlice(int ini, int dayCount, TollData* tollRecords, int
 	printf("\n%s===================================================================%s\n", ANSI_COLOR_CYAN, ANSI_COLOR_RESET);
 }
 
+static void clearScreen(void)
+{
+#ifdef _WIN32
+	system("cls");
+#else
+	system("clear");
+#endif
+}
+
+static bool waitForInput() {
+	printf("\n-----------------------------------------------------\n");
+	printf("Pressione QUALQUER TECLA para nova consulta ou ESC para SAIR.\n");
+	printf("-----------------------------------------------------\n");
+
+	// Limpa o buffer de entrada (CRUCIAL após o último scanf)
+	// Usamos um loop simples para garantir que o buffer esteja limpo antes do _getch
+	int c;
+	while ((c = getchar()) != '\n' && c != EOF) {}
+
+	// Captura a tecla IMEDIATAMENTE.
+	// Usamos _getch() se disponível (Windows) ou getchar() como fallback.
+	int key;
+#ifdef _WIN32
+	key = _getch(); // Captura imediata no Windows
+#else
+	key = getchar(); // Requer ENTER, mas é mais portátil
+#endif
+
+	// Valor de ESC em ASCII é 27.
+	if (key == 27) {
+		return false; // SAIR
+	}
+
+	return true; // CONTINUAR
+}
+
 int main(void)
 {
+	bool isRunning = true;
+	int startDay = 0;
+	int numDays = 0;
+
 	srand((unsigned int)time(NULL));
 
 	TollData tollRecords[TOTAL_TOLL_RECORDS] = {0};
@@ -167,7 +208,32 @@ int main(void)
 		tollRecords[i].CarCount = (int)trafic;
 	}
 
-	graphTollDataSlice(0, 7, tollRecords, TOTAL_TOLL_RECORDS);
+	printf("Bem-vindo ao sistema de monitoramento de fluxo!\n");
+
+	while (isRunning)
+	{
+		clearScreen();
+
+		printf("--- Sistema de Analise de Pedagio ---\n\n");
+		printf("Para ver o grafico de um intervalo, informe o dia inicial (1 a %d) e uma quantidade de dias.\n", TOTAL_TOLL_RECORDS);
+		printf("Ex.: 100, 20\n");
+		printf("Dia inicial (1 = primeiro registro): ");
+
+		scanf_s("%d", &startDay);
+
+		if (startDay > 0) startDay--;
+		else startDay = 0;
+
+		printf("Quantidade de dias: ");
+		scanf_s("%d", &numDays);
+		if (numDays < 1) numDays = 1;
+
+		graphTollDataSlice(startDay, numDays, tollRecords, TOTAL_TOLL_RECORDS);
+		isRunning = waitForInput();
+	}
+
+	clearScreen();
+	printf("Programa finalizado. Ate mais!\n");
 
 	return 0;
 }
