@@ -161,7 +161,7 @@ static void clearScreen(void)
 
 static bool waitForInput() {
 	printf("\n-------------------------------------------------------------\n");
-	printf("Pressione QUALQUER TECLA para nova consulta ou ESC para SAIR.\n");
+	printf("Pressione QUALQUER TECLA para nova consulta ou ESC para SAIR.");
 	printf("\n-------------------------------------------------------------\n");
 
 	int c;
@@ -195,8 +195,10 @@ int main(void)
 	{
 		WeekDay currentDay = i % 7;
 
+		//Aqui eu dandomizei o trafego. Um numero aleatório de 0 a 30000 + 30000, então de 30000 a 60000. Depois eu multiplico por um fator entre 0.9 e 1.1;
 		float trafic = ((float)((rand() % 30001) + 30000)) * ((float)((rand() % 21) + 90) / 100.0f);
 
+		//Para simular picos de movimento nos finais de semana, peguei o resultado do tráfego e multipliquei por um fator entre 1.1 e 1.3
 		if (currentDay == Sat || currentDay == Sun) trafic = trafic * ((float)((rand() % 21) + 110) / 100.0f);
 
 		tollRecords[i].Day = currentDay;

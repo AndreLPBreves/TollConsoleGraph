@@ -3,5 +3,5 @@
     <Platform Name="x64" />
     <Platform Name="x86" />
   </Configurations>
-  <Project Path="SimpleTollSystem/SimpleTollSystem.vcxproj" />
+  <Project Path="SimpleTollSystem/SimpleTollSystem.vcxproj" Id="406732ed-212f-46f5-a3dd-a8a066f77a3e" />
 </Solution>
